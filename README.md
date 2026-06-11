@@ -35,3 +35,6 @@ docker run --rm \
 
 ## BigQuery SQL Query: pitchers.sql
 Run in the BigQuery interface, this query calculates each pitcher's daily average spin rate and velocity for each pitch type, its trailing 7-day moving average, and its season-long baseline up to that date.
+
+## Daily Run Automation: dailyscrape.yaml
+A GitHub Actions workflow (.github/workflows/daily_scrape.yaml) to run the Statcast ingestion pipeline daily (cron at 10:00 UTC) and via manual dispatch. The job checks out the repo, authenticates to GCP using secrets, sets up Cloud SDK, builds a Docker image (phillies-statcast-scraper) and runs the container with GCP project and credentials mounted from the runner environment to perform the daily scrape and load.
