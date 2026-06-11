@@ -2,3 +2,5 @@ pybaseball>=2.2.0
 google-cloud-bigquery>=3.10.0
 pyarrow>=11.0.0
 pandas>=2.0.0
+scipy>=1.10.0
+db-dtypes>=1.1.0
