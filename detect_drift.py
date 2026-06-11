@@ -8,7 +8,7 @@ def get_yesterdays_active_pitchers(client, project_id, target_date):
     """Finds all unique pitchers and pitch types thrown on the target date."""
     query = f"""
     SELECT DISTINCT player_name, pitch_type
-    FROM `{project_id}.phillies_mlops.statcast_daily_pitches`
+    FROM `{project_id}.baseball_data.statcast_daily_pitches`
     WHERE PARSE_DATE('%Y-%m-%d', game_date) = '{target_date}'
       AND pitch_type IS NOT NULL
     """
@@ -23,7 +23,7 @@ def fetch_pitch_history(client, project_id, pitcher_name, pitch_type):
       PARSE_DATE('%Y-%m-%d', game_date) AS match_date,
       SAFE_CAST(release_spin_rate AS FLOAT64) AS spin_rate,
       SAFE_CAST(release_speed AS FLOAT64) AS velocity
-    FROM `{project_id}.phillies_mlops.statcast_daily_pitches`
+    FROM `{project_id}.baseball_data.statcast_daily_pitches`
     WHERE player_name = '{pitcher_name}' 
       AND pitch_type = '{pitch_type}'
       AND release_spin_rate IS NOT NULL
