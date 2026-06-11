@@ -29,12 +29,17 @@ def load_to_bigquery(df):
     if df is None or df.empty:
         return
 
-    # Clean columns for BigQuery
-    df.columns = [c.replace('.', '_').replace(' ', '_').lower() for c in df.columns]
-    for col in df.select_dtypes(include=['object']).columns:
+    # Silenced the Pandas4Warning by explicitly targeting both object and string types
+    for col in df.select_dtypes(include=['object', 'string']).columns:
         df[col] = df[col].astype(str)
 
-    client = bigquery.Client()
+    # Forced the project variable directly into the BigQuery initializer
+    project_id = os.getenv("GCP_PROJECT_ID")
+    if not project_id:
+        raise ValueError("GCP_PROJECT_ID environment variable is missing!")
+        
+    client = bigquery.Client(project=project_id)
+
     table_ref = f"{os.getenv('GCP_PROJECT_ID')}.baseball_data.statcast_daily_pitches"
 
     job_config = bigquery.LoadJobConfig(

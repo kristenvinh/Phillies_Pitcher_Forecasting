@@ -32,3 +32,6 @@ docker run --rm \
   -v ~/.config/gcloud/application_default_credentials.json:/app/secrets/google_creds.json \
   phillies-statcast-scraper
   ```
+
+## BigQuery SQL Query: pitchers.sql
+Run in the BigQuery interface, this query calculates each pitcher's daily average spin rate and velocity for each pitch type, its trailing 7-day moving average, and its season-long baseline up to that date.
