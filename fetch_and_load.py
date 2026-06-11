@@ -35,7 +35,7 @@ def load_to_bigquery(df):
         df[col] = df[col].astype(str)
 
     client = bigquery.Client()
-    table_ref = f"{os.getenv('GCP_PROJECT_ID')}.phillies_mlops.statcast_daily_pitches"
+    table_ref = f"{os.getenv('GCP_PROJECT_ID')}.baseball_data.statcast_daily_pitches"
 
     job_config = bigquery.LoadJobConfig(
         write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
