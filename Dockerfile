@@ -22,6 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the ingestion script into the working directory
 COPY fetch_and_load.py .
 COPY detect_drift.py .
+COPY sync_to_sheets.py .
 
 # Expose environment variable placeholders (to be passed at runtime)
 ENV GCP_PROJECT_ID=your-gcp-project-id
