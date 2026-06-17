@@ -8,36 +8,11 @@ Created using assistance from Gemini AI.
 
 This script calculates yesterday's date, fetches the pitch-by-pitch data using pybaseball, filters for the Phillies pitching staff, cleans up column names, and appends the data into a BigQuery database. If no data has been loaded yet, it loads all the data for the current season.
 
-### Build Docker Image
-
-```bash
-docker build -t phillies-statcast-scraper .
-```
-
-### One-Time Backfill of Data
-
-```bash
-docker run --rm \
-  -e GCP_PROJECT_ID="phillies-analytics-portfolio" \
-  -v ~/.config/gcloud/application_default_credentials.json:/app/secrets/google_creds.json \
-  phillies-statcast-scraper \
-  python fetch_and_load.py --start "2026-03-25" --end "2026-06-10"
-```
-
-### Daily Cron Job
-
-```bash
-docker run --rm \
-  -e GCP_PROJECT_ID="phillies-analytics-portfolio" \
-  -v ~/.config/gcloud/application_default_credentials.json:/app/secrets/google_creds.json \
-  phillies-statcast-scraper
-  ```
-
 ## BigQuery SQL Query: pitchers.sql
 Run in the BigQuery interface, this query calculates each pitcher's daily average spin rate and velocity for each pitch type, its trailing 7-day moving average, and its season-long baseline up to that date.
 
 ## Daily Run Automation: dailyscrape.yaml
-A GitHub Actions workflow (.github/workflows/daily_scrape.yaml) to run the Statcast ingestion pipeline daily (cron at 10:00 UTC) and via manual dispatch. The job checks out the repo, authenticates to GCP using secrets, sets up Cloud SDK, builds a Docker image (phillies-statcast-scraper) and runs the container with GCP project and credentials mounted from the runner environment to perform the daily scrape and load.
+A GitHub Actions workflow (.github/workflows/daily_scrape.yaml) to run the Statcast ingestion pipeline daily (cron at 10:00 UTC) and via manual dispatch. The job checks out the repo, authenticates to GCP using secrets, sets up Cloud SDK, builds a Docker image (phillies-statcast-scraper) and runs the container with GCP project and credentials mounted from the runner environment to perform the daily scrape and load (fetch_and_load.py).
 
 ## Drift Detection Script: detect_drift.py
 A small utility that queries Statcast pitch data from BigQuery for pitchers from the previous day's game, splits records into a historical baseline and a target game, and runs two-sample Kolmogorov–Smirnov tests on spin rate and velocity to detect distributional drift (p < 0.05). Includes simple safeguards (requires >=5 pitches in the target game) and prints actionable alerts. Defaults project from GCP_PROJECT_ID env var and provides sample pitcher, pitch code, and target date for quick local testing.
@@ -52,13 +27,3 @@ docker run --rm \
   python detect_drift.py
   ```
 
-  ### Post yesterday's pitches to Google Sheets
-  ```bash
-  docker run --rm \
-  -e GCP_PROJECT_ID="phillies-analytics-portfolio" \
-  -e GOOGLE_APPLICATION_CREDENTIALS="/app/secrets/google_creds.json" \
-  -e GOOGLE_SHEET_ID="1VmOWxfEsUvKZvWJ339JDkU3Y6s3XfugPnjfPAXpKzcw" \
-  -v /Users/kristenvinh/Documents/Github_repos/Phillies_Pitcher_Forecasting/phillies-analytics-portfolio-e7a3b929f96a.json:/app/secrets/google_creds.json \
-  phillies-statcast-scraper \
-  python sync_to_sheets.py
-```

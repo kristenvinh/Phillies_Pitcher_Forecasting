@@ -4,7 +4,7 @@ on:
   schedule:
     # Runs everyday at 10:00 AM UTC (6:00 AM Eastern Time)
     - cron: '0 10 * * *'
-  workflow_dispatch: # Allows you to trigger the job manually from the GitHub UI
+  workflow_dispatch: 
 
 jobs:
   run-scraper:
@@ -14,7 +14,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # Authenticate directly to Google Cloud using GitHub Secrets
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
@@ -27,8 +26,6 @@ jobs:
       run: |
         docker build -t phillies-statcast-scraper .
 
-    # Run the container exactly like you did on your Mac Studio, 
-    # but pulling the credentials dynamically from the automated runner environment
     - name: Execute Daily Scrape & Load
       env:
         GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -38,3 +35,16 @@ jobs:
           -e GOOGLE_APPLICATION_CREDENTIALS="/app/secrets/google_creds.json" \
           -v $GOOGLE_APPLICATION_CREDENTIALS:/app/secrets/google_creds.json \
           phillies-statcast-scraper
+
+    - name: Sync Features to Google Sheets
+      env:
+        GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+      run: |
+        docker run --rm \
+          -e GCP_PROJECT_ID="$GCP_PROJECT_ID" \
+          -e GOOGLE_SHEET_ID="$GOOGLE_SHEET_ID" \
+          -e GOOGLE_APPLICATION_CREDENTIALS="/app/secrets/google_creds.json" \
+          -v $GOOGLE_APPLICATION_CREDENTIALS:/app/secrets/google_creds.json \
+          phillies-statcast-scraper \
+          python sync_to_sheets.py
