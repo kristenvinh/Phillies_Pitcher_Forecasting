@@ -77,6 +77,12 @@ if __name__ == "__main__":
         
         if results:
             print(f"📊 {pitcher} ({pitch_type}) - Pitches: {results['pitches_thrown']}")
+            # ... (the rest of the alert prints)
+        else:
+            print(f"➖ {pitcher} ({pitch_type}) - Skipped (Sample size too small)")
+        
+        if results:
+            print(f"📊 {pitcher} ({pitch_type}) - Pitches: {results['pitches_thrown']}")
             
             if results['spin_drift']:
                 print(f"  ⚠️ ALERT: Spin drift detected! (p-value: {results['p_val_spin']:.4f})")
