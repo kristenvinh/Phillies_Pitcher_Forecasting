@@ -58,7 +58,7 @@ docker run --rm \
   -e GCP_PROJECT_ID="phillies-analytics-portfolio" \
   -e GOOGLE_APPLICATION_CREDENTIALS="/app/secrets/google_creds.json" \
   -e GOOGLE_SHEET_ID="1VmOWxfEsUvKZvWJ339JDkU3Y6s3XfugPnjfPAXpKzcw" \
-  -v ~/.config/gcloud/application_default_credentials.json:/app/secrets/google_creds.json \
+  -v /Users/kristenvinh/Documents/Github_repos/Phillies_Pitcher_Forecasting/phillies-analytics-portfolio-e7a3b929f96a.json:/app/secrets/google_creds.json \
   phillies-statcast-scraper \
   python sync_to_sheets.py
 ```
