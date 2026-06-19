@@ -8,6 +8,13 @@ Created using assistance from Gemini AI.
 
 This script calculates yesterday's date, fetches the pitch-by-pitch data using pybaseball, filters for the Phillies pitching staff, cleans up column names, and appends the data into a BigQuery database. If no data has been loaded yet, it loads all the data for the current season.
 
+### Build Docker Image
+
+```bash
+docker build -t phillies-statcast-scraper .
+```
+
+
 ## BigQuery SQL Query: pitchers.sql
 Run in the BigQuery interface, this query calculates each pitcher's daily average spin rate and velocity for each pitch type, its trailing 7-day moving average, and its season-long baseline up to that date.
 

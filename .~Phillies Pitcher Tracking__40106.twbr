@@ -147,7 +147,7 @@
       <column-instance column='[spin_rate]' derivation='Avg' name='[avg:spin_rate:qk]' pivot='key' type='quantitative' />
       <column-instance column='[velocity]' derivation='Avg' name='[avg:velocity:qk]' pivot='key' type='quantitative' />
       <extract count='-1' enabled='true' object-id='' units='records' user-specific='false'>
-        <connection access_mode='readonly' author-locale='en_US' class='hyper' dbname='/var/folders/4x/ptbsqx910ss5p1lzy1fn39g40000gn/T/tableau-temp/#TableauTemp_0wsvxfr1icl9751ex8w4t1wwcll8.hyper' default-settings='hyper' schema='Extract' sslmode='' tablename='Extract' update-time='' username='tableau_internal_user'>
+        <connection access_mode='readonly' authentication='auth-none' author-locale='en_US' class='hyper' dbname='/var/folders/4x/ptbsqx910ss5p1lzy1fn39g40000gn/T/tableau-temp/#TableauTemp_0rldnfe08xhf8118eccio0cejgam.hyper' default-settings='yes' schema='Extract' sslmode='' update-time='' username='tableau_internal_user'>
           <relation name='Extract' table='[Extract].[Extract]' type='table' />
           <metadata-records>
             <metadata-record class='column'>

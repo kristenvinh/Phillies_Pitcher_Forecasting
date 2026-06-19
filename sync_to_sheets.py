@@ -21,6 +21,7 @@ def sync_bigquery_to_sheets():
     # Query your feature-engineered rolling metrics view or table
     query = f"""
     SELECT 
+      sv_id AS pitch_id,
       PARSE_DATE('%Y-%m-%d', game_date) AS match_date,
       player_name,
       pitch_type,
