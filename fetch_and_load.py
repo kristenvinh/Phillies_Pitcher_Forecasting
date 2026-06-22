@@ -14,6 +14,7 @@ def get_statcast_data(start_dt, end_dt):
     if df.empty:
         print("No pitch data found for this date range.")
         return None
+    
         
     # Filter strictly for Phillies pitching
     phillies_df = df[(df['home_team'] == 'PHI') | (df['away_team'] == 'PHI')]
@@ -28,6 +29,16 @@ def get_statcast_data(start_dt, end_dt):
 def load_to_bigquery(df):
     if df is None or df.empty:
         return
+    # Generate a guaranteed unique composite ID for each pitch
+    # Format: {game_pk}_{at_bat_number}_{pitch_number}
+    df['play_id'] = (
+        df['game_pk'].astype(str) + "_" + 
+        df['at_bat_number'].astype(str) + "_" + 
+        df['pitch_number'].astype(str)
+    )
+    # Silenced the Pandas4Warning by explicitly targeting both object and string types
+    for col in df.select_dtypes(include=['object', 'string']).columns:
+        df[col] = df[col].astype(str)
 
     # Silenced the Pandas4Warning by explicitly targeting both object and string types
     for col in df.select_dtypes(include=['object', 'string']).columns:
